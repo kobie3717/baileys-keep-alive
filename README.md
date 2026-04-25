@@ -19,6 +19,7 @@ Drop-in connection lifecycle manager for Baileys:
 ## What it doesn't do
 
 - Not anti-ban (that's [baileys-antiban](https://github.com/kobie3717/baileys-antiban)'s job)
+- **Not session-state validity** — TCP keepalive ≠ WhatsApp session keepalive. After a long disconnect, your **socket** can reconnect but the **session state** may be stale, triggering WA mobile to force-logout (Baileys [#2110](https://github.com/WhiskeySockets/Baileys/issues/2110)). For the pre-check that prevents this, pair with [`baileys-antiban`](https://github.com/kobie3717/baileys-antiban)'s `reconnectThrottle` + `sessionStability` modules. See [docs/keepalive.md](https://github.com/kobie3717/baileys-antiban/blob/master/docs/keepalive.md) in that repo.
 - Not session storage (use [WaSP](https://github.com/kobie3717/wasp-protocol) or `useMultiFileAuthState`)
 - Not multi-tenant orchestration (deliberately scoped to ONE socket)
 - Not opinionated about logger (accepts any `{ info, warn, error }`)
