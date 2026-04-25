@@ -149,6 +149,20 @@ See `examples/`:
 - `with-alerts.ts` — Sentry + Telegram hooks (commented)
 - `multi-handler.ts` — all hooks + custom config
 
+## Known Limitations (v0.1)
+
+This release treats the disconnect-reason space coarsely: only `loggedOut` (HTTP 401) is terminal; everything else triggers reconnect with backoff. That covers ~90% of real-world cases but misses some nuanced ones.
+
+WhatsApp Web's session protocol — see the foundational [sigalor/whatsapp-web-reveng](https://github.com/sigalor/whatsapp-web-reveng) research that seeded Baileys — uses an HKDF key chain. When the chain desyncs (e.g. `badSession`, `restoreCorrupted`) or a different device claims the socket (`connectionReplaced` / 440), simple reconnect won't help — you need to reset session state or surrender the slot. v0.1 doesn't distinguish these cases.
+
+If you hit these, listen on `connection.update` yourself for the specific `lastDisconnect.error.output.statusCode` and short-circuit `keepAlive` via `handle.stop()` before it spins fruitless retries.
+
+**Planned for v0.2:**
+- `onSessionCorrupted` callback (badSession / restoreCorrupted)
+- `onConnectionReplaced` callback (440)
+- `onMultideviceMismatch` callback
+- Optional auto-purge-state hook so session-corruption cases can self-heal
+
 ## Philosophy
 
 Built for production WhatsApp bots that need to stay online. No magic, no bloat. You provide the socket factory, we handle the retry loop. Pairs with:
