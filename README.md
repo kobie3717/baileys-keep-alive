@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/baileys-keep-alive)](https://www.npmjs.com/package/baileys-keep-alive)
 [![license MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![SLSA Provenance](https://img.shields.io/badge/SLSA-provenance%20signed-success?logo=sigstore)](https://github.com/kobie3717/baileys-keep-alive/actions/workflows/release.yml)
 [![Sister: baileys-antiban](https://img.shields.io/badge/sister-baileys--antiban-25D366)](https://github.com/kobie3717/baileys-antiban)
 
 Automatic reconnect, heartbeat, and QR-stale detection for [@whiskeysockets/baileys](https://github.com/WhiskeySockets/Baileys) connections. Sister library to [baileys-antiban](https://github.com/kobie3717/baileys-antiban).
@@ -170,6 +171,21 @@ Built for production WhatsApp bots that need to stay online. No magic, no bloat.
 
 - [baileys-antiban](https://github.com/kobie3717/baileys-antiban) — rate limiting + ban prevention
 - [WaSP](https://github.com/kobie3717/wasp-protocol) — session persistence + multi-device
+
+## Supply Chain Security
+
+This package is published from GitHub Actions with **npm provenance** via [sigstore](https://www.sigstore.dev/). Every release tag (`v*`) produces a signed attestation tying the published artifact back to the exact source commit + workflow run.
+
+To verify a downloaded version:
+
+```bash
+npm install baileys-keep-alive
+npm view baileys-keep-alive@<version> dist.integrity
+# or fetch the attestation:
+gh attestation verify $(npm pack baileys-keep-alive@<version>) --owner kobie3717
+```
+
+Inspired by post-lotusbail (Sept 2025, 56K-download supply chain attack on a baileys variant) — the only Baileys-ecosystem package shipping signed releases as of v0.1+.
 
 ## License
 
